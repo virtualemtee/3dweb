@@ -30,13 +30,13 @@
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
 
-    // Model loader with Draco compression
+    // Model loader with Draco compression (optional)
     const loader = new GLTFLoader();
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/'); // CDN path for Draco
     loader.setDRACOLoader(dracoLoader);
 
-    // Load model and add to scene
+    // Load .gltf model (and associated .bin and textures if needed)
     loader.load('./model.gltf', (gltf) => {
       const model = gltf.scene;
       scene.add(model);
