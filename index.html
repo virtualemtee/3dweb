@@ -36,13 +36,32 @@
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/'); // CDN path for Draco
     loader.setDRACOLoader(dracoLoader);
 
-    // Load .gltf model (and associated .bin and textures if needed)
-    loader.load('./model.gltf', (gltf) => {
-      const model = gltf.scene;
-      scene.add(model);
-    }, undefined, (error) => {
-      console.error('Error loading model:', error);
-    });
+    // Function to detect file type and load the correct model
+    function loadModel(modelUrl) {
+      const extension = modelUrl.split('.').pop().toLowerCase();
+      if (extension === 'glb') {
+        // Load .glb file
+        loader.load(modelUrl, (gltf) => {
+          const model = gltf.scene;
+          scene.add(model);
+        }, undefined, (error) => {
+          console.error('Error loading GLB model:', error);
+        });
+      } else if (extension === 'gltf') {
+        // Load .gltf file (and associated .bin and textures)
+        loader.load(modelUrl, (gltf) => {
+          const model = gltf.scene;
+          scene.add(model);
+        }, undefined, (error) => {
+          console.error('Error loading GLTF model:', error);
+        });
+      } else {
+        console.error('Unsupported file format:', extension);
+      }
+    }
+
+    // Load your model based on file type (adjust the path as needed)
+    loadModel('./model.glb');  // or './model.gltf'
 
     // OrbitControls for interaction
     const controls = new OrbitControls(camera, renderer.domElement);
